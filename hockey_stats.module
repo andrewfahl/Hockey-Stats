@@ -1,0 +1,325 @@
+<?php
+
+/**
+ * @file
+ * Hockey Stats Module File
+ * 
+ */
+
+/*
+ * Call the function that auto loads the files for the module
+*/
+spl_autoload_register('hockey_stats_auto_load_files');
+
+function hockey_stats_auto_load_files() {
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Application.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/CrudInterface.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/League.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Season.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Team.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/SeasonTeam.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/SeasonTeamPlayer.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Location.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Game.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Player.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/PlayerPosition.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePlayer.php';    
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/Utility.php';
+}
+
+/**
+ * Implements hook_menu().
+*/
+function hockey_stats_menu() {
+    $items = array();
+ 
+    $items['base'] = array(
+        'title'            => 'Hockey Stats',
+        'page callback'    => 'hockey_stats_home_page_content',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.base.inc',
+    );
+   
+    $items['base/league'] = array(
+        'title'            => 'League',
+        'page callback'    => 'hockey_stats_league_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.league.inc',
+    );
+    
+    $items['base/league/edit'] = array(
+        'title'            => 'Edit League',
+        'page callback'    => 'hockey_stats_league_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.league.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/league/delete'] = array(
+        'title'            => 'Delete League',
+        'page callback'    => 'hockey_stats_league_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.league.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/league/add'] = array(
+        'title'            => 'Add League',
+        'page callback'    => 'hockey_stats_league_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.league.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/season'] = array(
+        'title'            => 'Season',
+        'page callback'    => 'hockey_stats_season_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.season.inc',
+    );
+    
+    $items['base/season/edit'] = array(
+        'title'            => 'Edit Season',
+        'page callback'    => 'hockey_stats_season_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.season.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/season/delete'] = array(
+        'title'            => 'Delete Season',
+        'page callback'    => 'hockey_stats_season_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.season.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/season/add'] = array(
+        'title'            => 'Add Season',
+        'page callback'    => 'hockey_stats_season_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.season.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/season/editteams'] = array(
+        'title'            => 'Add or Remove Teams From Season',
+        'page callback'    => 'hockey_stats_season_edit_teams_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.season.inc',
+        'type'             => MENU_CALLBACK,
+    );
+
+    $items['base/team'] = array(
+        'title'            => 'Team',
+        'page callback'    => 'hockey_stats_team_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+    );
+    
+    $items['base/team/edit'] = array(
+        'title'            => 'Edit Team',
+        'page callback'    => 'hockey_stats_team_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/team/delete'] = array(
+        'title'            => 'Delete Team',
+        'page callback'    => 'hockey_stats_team_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/team/add'] = array(
+        'title'            => 'Add Team',
+        'page callback'    => 'hockey_stats_team_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+        'type'             => MENU_CALLBACK,
+    );
+
+    $items['base/team/setroster'] = array(
+        'title'            => 'Set Roster',
+        'page callback'    => 'hockey_stats_team_set_roster_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/team/assignnumbers'] = array(
+        'title'            => 'Assign Numbers',
+        'page callback'    => 'hockey_stats_team_assign_numbers_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.team.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/location'] = array(
+        'title'            => 'Location',
+        'page callback'    => 'hockey_stats_location_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.location.inc',
+    );
+    
+    $items['base/location/edit'] = array(
+        'title'            => 'Edit Location',
+        'page callback'    => 'hockey_stats_location_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.location.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/location/delete'] = array(
+        'title'            => 'Delete Location',
+        'page callback'    => 'hockey_stats_location_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.location.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/location/add'] = array(
+        'title'            => 'Add Location',
+        'page callback'    => 'hockey_stats_location_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.location.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game'] = array(
+        'title'            => 'Game',
+        'page callback'    => 'hockey_stats_game_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+    );
+    
+    $items['base/game/edit'] = array(
+        'title'            => 'Edit Game',
+        'page callback'    => 'hockey_stats_game_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/delete'] = array(
+        'title'            => 'Delete Game',
+        'page callback'    => 'hockey_stats_game_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/add'] = array(
+        'title'            => 'Add Game',
+        'page callback'    => 'hockey_stats_game_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/goals'] = array(
+        'title'            => 'Goals',
+        'page callback'    => 'hockey_stats_game_goals_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/penalties'] = array(
+        'title'            => 'Penalties',
+        'page callback'    => 'hockey_stats_game_penalties_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/attendance'] = array(
+        'title'            => 'Attendance',
+        'page callback'    => 'hockey_stats_game_attendance_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );    
+    
+    $items['base/player'] = array(
+        'title'            => 'Player',
+        'page callback'    => 'hockey_stats_player_landing_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.player.inc',
+    );
+    
+    $items['base/player/edit'] = array(
+        'title'            => 'Edit Player',
+        'page callback'    => 'hockey_stats_player_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.player.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/player/delete'] = array(
+        'title'            => 'Delete Player',
+        'page callback'    => 'hockey_stats_player_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.player.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/player/add'] = array(
+        'title'            => 'Add Player',
+        'page callback'    => 'hockey_stats_player_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.player.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    return $items;
+ }
+
+/**
+ * Implementation of hook_views_api().
+*/
+function hockey_stats_views_api() {
+    return array(
+        'api' => 3,
+        'path' => drupal_get_path('module', 'hockey_stats') . '/includes/views',
+    );
+}
+
+/**
+ * Implementation of hook_init().
+*/
+function hockey_stats_init() {
+  drupal_add_library('system', 'jquery.cookie');   
+}

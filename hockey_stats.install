@@ -1,0 +1,1689 @@
+<?php
+
+/**
+ * @file
+ * Hockey Stats Module Database setup
+ */
+
+function hockey_stats_schema() {
+    
+  $schema['league'] = array(
+    'description' => t('Holds League data'),
+    'fields' => array(
+      'leagueid' => array(
+        'description' => t('League Primary Key'),
+        'type' => 'serial',
+        'not null' => TRUE,
+        ),
+      'name' => array(
+        'description' => t('The league name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      'sequence' => array(
+        'description' => t('The sort order of the league'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_userid' => array(
+        'description' => t('The user saving the record'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_datetime' => array(
+        'description' => t('The date and time the record was saved'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+    ),
+    'primary key' => array('leagueid'),
+  );
+  
+  $schema['league_history'] = array(
+    'description' => t('Holds league data history'),
+    'fields' => array(
+      'league_historyid' => array(
+        'description' => t('League History Primary Key'),
+        'type' => 'serial',
+        'not null' => TRUE,
+        ),
+      'leagueid' => array(
+        'description' => t('League Primary Key'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'name' => array(
+        'description' => t('The league name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      'sequence' => array(
+        'description' => t('The sort order of the league'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_userid' => array(
+        'description' => t('The user saving the record'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_datetime' => array(
+        'description' => t('The date and time the record was saved'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+      'history_userid' => array(
+        'description' => t('The user adding the record to history'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'history_datetime' => array(
+        'description' => t('The date and time the record was added to history'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+    ),
+    'primary key' => array('league_historyid'),
+  );
+  
+  $schema['season'] = array(
+    'description' => t('Holds season data'),
+    'fields' => array(
+      'seasonid' => array(
+        'description' => t('Season Primary Key'),
+        'type' => 'serial',
+        'not null' => TRUE,
+        ),
+      'leagueid' => array(
+        'description' => t('League Primary Key'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'name' => array(
+        'description' => t('The season name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      'start_datetime' => array(
+        'description' => t('The league start date'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+      'saved_userid' => array(
+        'description' => t('The user saving the record'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_datetime' => array(
+        'description' => t('The date and time the record was saved'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+    ),
+    'primary key' => array('seasonid'),
+  );
+  
+  $schema['season_history'] = array(
+    'description' => t('Holds season history data'),
+    'fields' => array(
+      'season_historyid' => array(
+        'description' => t('Season History Primary Key'),
+        'type' => 'serial',
+        'not null' => TRUE,
+        ),
+      'seasonid' => array(
+        'description' => t('Season Primary Key'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'leagueid' => array(
+        'description' => t('League Primary Key'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'name' => array(
+        'description' => t('The season name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      'start_datetime' => array(
+        'description' => t('The season start date'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+      'saved_userid' => array(
+        'description' => t('The user saving the record'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'saved_datetime' => array(
+        'description' => t('The date and time the record was saved'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+      'history_userid' => array(
+        'description' => t('The user adding the record to history'),
+        'type' => 'int',
+        'not null' => TRUE,
+        ),
+      'history_datetime' => array(
+        'description' => t('The date and time the record was added to history'),
+        'mysql_type' => 'datetime',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        ),
+    ),
+    'primary key' => array('season_historyid'),
+  );
+  
+$schema['team'] = array(
+  'description' => t('Holds team data'),
+  'fields' => array(
+    'teamid' => array(
+      'description' => t('Team Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'name' => array(
+      'description' => t('The team name'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ),
+    'active_yn' => array(
+      'description' => t('if the team is active'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('teamId'),
+  );
+  
+$schema['team_history'] = array(
+  'description' => t('Holds team history data'),
+  'fields' => array(
+    'team_historyid' => array(
+      'description' => t('Team History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'teamid' => array(
+	    'description' => t('Team Primary Key'),
+	    'type' => 'int',
+	    'not null' => TRUE,
+      ),
+    'name' => array(
+      'description' => t('The team name'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ),
+    'active_yn' => array(
+      'description' => t('if the team is acitve'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('team_historyid'),
+  );  
+
+$schema['season_team'] = array(
+  'description' => t('Controls what teams are playing in the season'),
+  'fields' => array(
+    'season_teamid' => array(
+      'description' => t('Seson Team Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'seasonid' => array(
+      'description' => t('Season Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'teamid' => array(
+      'description' => t('Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ), 
+  ),
+  'primary key' => array('season_teamid'),
+);  
+
+$schema['season_team_history'] = array(
+  'description' => t('Controls the history of what teams are playing in the season'),
+  'fields' => array(
+    'season_team_historyid' => array(
+      'description' => t('Seson Team History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'season_teamid' => array(
+      'description' => t('Seson Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'seasonid' => array(
+      'description' => t('Season Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'teamid' => array(
+      'description' => t('Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('season_team_historyid'),
+);  
+
+$schema['location'] = array(
+  'description' => t('Location of the game'),
+  'fields' => array(
+    'locationid' => array(
+      'description' => t('Location Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'name' => array(
+      'description' => t('The location name'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ),
+    'address' => array(
+      'description' => t('address of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ),
+    'address2' => array(
+      'description' => t('address2 of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'city' => array(
+      'description' => t('city of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'state' => array(
+      'description' => t('state of the loction'),
+      'type' => 'varchar',
+      'length' => '255',
+      ),
+    'zip' => array(
+      'description' => t('zip of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('locationid'),
+);  
+
+$schema['location_history'] = array(
+  'description' => t('Location History'),
+  'fields' => array(
+    'location_historyid' => array(
+      'description' => t('Location History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'locationid' => array(
+      'description' => t('Location Primary Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'name' => array(
+      'description' => t('The location name'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ),
+    'address' => array(
+      'description' => t('address of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ),
+    'address2' => array(
+      'description' => t('address2 of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'city' => array(
+      'description' => t('city of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'state' => array(
+      'description' => t('state of the loction'),
+      'type' => 'varchar',
+      'length' => '255',
+       ),
+    'zip' => array(
+      'description' => t('zip of the location'),
+      'type' => 'varchar',
+      'length' => '255',
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('location_historyid'),
+);  
+
+//
+// new part
+//
+
+$schema['game'] = array(
+  'description' => t('Game'),
+  'fields' => array(
+    'gameid' => array(
+      'description' => t('Game Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'home_teamid' => array(
+      'description' => t('The home team'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'visiting_teamid' => array(
+      'description' => t('The visiting team'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'locationid' => array(
+      'description' => t('The game location'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'seasonid' => array(
+      'description' => t('The season'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'start_datetime' => array(
+      'description' => t('game date and time'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ), 
+    'playoff_game_yn' => array(
+      'description' => t('if the game is a playoff game'),
+      'type' => 'int',
+      'not null' => TRUE,         
+      ), 
+    'home_team_first_period_goals' => array(
+      'description' => t('The home team first period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_first_period_goals' => array(
+      'description' => t('The visiting team first period goals'),
+      'type' => 'int',
+      ),
+    'home_team_second_period_goals' => array(
+      'description' => t('The home team second period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_second_period_goals' => array(
+      'description' => t('The visiting team second period goals'),
+      'type' => 'int',
+      ),
+    'home_team_third_period_goals' => array(
+      'description' => t('The home team third period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_third_period_goals' => array(
+      'description' => t('The visiting team third period goals'),
+      'type' => 'int',
+      ),
+    'home_team_over_time_goals' => array(
+      'description' => t('The home team over time goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_over_time_goals' => array(
+      'description' => t('The visiting team over time goals'),
+      'type' => 'int',
+      ),
+    'home_team_shots' => array(
+      'description' => t('The home team shot total'),
+      'type' => 'int',
+      ),
+    'visiting_team_shots' => array(
+      'description' => t('The visiting team shot total'),
+      'type' => 'int',
+      ),
+    'comment' => array(
+      'description' => t('The game comment'),
+      'type' => 'varchar',
+      'length' => '2000',
+      ),       
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('gameid'),
+);  
+
+$schema['game_history'] = array(
+  'description' => t('Game History'),
+  'fields' => array(
+    'game_historyid' => array(
+      'description' => t('Game History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'home_teamid' => array(
+      'description' => t('The home team'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'visiting_teamid' => array(
+      'description' => t('The visiting team'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'locationid' => array(
+      'description' => t('The game location'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'seasonid' => array(
+      'description' => t('The season'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'start_datetime' => array(
+      'description' => t('game date and time'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ), 
+    'playoff_game_yn' => array(
+      'description' => t('if the game is a playoff game'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),        
+    'home_team_first_period_goals' => array(
+      'description' => t('The home team first period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_first_period_goals' => array(
+      'description' => t('The visiting team first period goals'),
+      'type' => 'int',
+      ),
+    'home_team_second_period_goals' => array(
+      'description' => t('The home team second period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_second_period_goals' => array(
+      'description' => t('The visiting team second period goals'),
+      'type' => 'int',
+      ),
+    'home_team_third_period_goals' => array(
+      'description' => t('The home team third period goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_third_period_goals' => array(
+      'description' => t('The visiting team third period goals'),
+      'type' => 'int',
+      ),
+    'home_team_over_time_goals' => array(
+      'description' => t('The home team over time goals'),
+      'type' => 'int',
+      ),
+    'visiting_team_over_time_goals' => array(
+      'description' => t('The visiting team over time goals'),
+      'type' => 'int',
+      ),
+    'home_team_shots' => array(
+      'description' => t('The home team shot total'),
+      'type' => 'int',
+      ),
+    'visiting_team_shots' => array(
+      'description' => t('The visiting team shot total'),
+      'type' => 'int',
+      ),
+    'comment' => array(
+      'description' => t('The game comment'),
+      'type' => 'varchar',
+      'length' => '2000',
+      ),       
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_historyid'),
+);  
+
+$schema['player_position'] = array(
+  'description' => t('Player Position'),
+  'fields' => array(
+    'player_positionid' => array(
+      'description' => t('Position Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('Position Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ), 
+    'abbreviation' => array(
+      'description' => t('Position Abbreviation'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('player_positionid'),
+);  
+
+$schema['player_position_history'] = array(
+  'description' => t('Player Position History'),
+  'fields' => array(
+    'player_position_historyid' => array(
+      'description' => t('Position Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'player_positionid' => array(
+      'description' => t('Position Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('Position Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ), 
+    'abbreviation' => array(
+      'description' => t('Position Abbreviation'),
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => TRUE,
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+  'primary key' => array('player_position_historyid'),
+);  
+
+$schema['player'] = array(
+  'description' => t('Players'),
+  'fields' => array(
+    'playerid' => array(
+      'description' => t('Player Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'first_name' => array(
+       'description' => t('Player First Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ),
+     'last_name' => array(
+        'description' => t('Player Last Name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),   
+    'player_positionid' => array(
+      'description' => t('Player Position Foreign Key'),
+      'type' => 'int',
+      ),
+    'secondary_player_positionid' => array(
+      'description' => t('Secondary Player Position Foreign Key'),
+      'type' => 'int',
+      ),
+    'active_yn' => array(
+      'description' => t('if the team is active'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('playerid'),
+);  
+
+$schema['player_history'] = array(
+  'description' => t('Player History'),
+  'fields' => array(
+    'player_historyid' => array(
+      'description' => t('Player History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'playerid' => array(
+       'description' => t('Player Primary Key'),
+       'type' => 'int',
+       'not null' => TRUE,
+      ),
+     'first_name' => array(
+       'description' => t('Player First Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ),
+     'last_name' => array(
+        'description' => t('Player Last Name'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),    
+    'player_positionid' => array(
+      'description' => t('Player Position Foreign Key'),
+      'type' => 'int',
+      ),
+    'secondary_player_positionid' => array(
+      'description' => t('Secondary Player Position Foreign Key'),
+      'type' => 'int',
+      ),
+    'active_yn' => array(
+      'description' => t('if the team is active'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+  'primary key' => array('player_historyid'),
+);  
+
+$schema['season_team_player'] = array(
+  'description' => t('Players on the team for a season'),
+  'fields' => array(
+    'season_team_playerid' => array(
+      'description' => t('Season Team Player Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),   
+    'season_teamid' => array(
+      'description' => t('Season Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'playerid' => array(
+      'description' => t('Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'number' => array(
+      'description' => t('Players Number for this season'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('season_team_playerid'),
+);  
+
+$schema['season_team_player_history'] = array(
+  'description' => t('Players on the team for a season'),
+  'fields' => array(
+    'season_team_player_historyid' => array(
+      'description' => t('Season Team Player History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),   
+    'season_team_playerid' => array(
+      'description' => t('Season Team Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),   
+    'season_teamid' => array(
+      'description' => t('Season Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'playerid' => array(
+      'description' => t('Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'number' => array(
+      'description' => t('Players Number for this season'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+     'history_userid' => array(
+       'description' => t('The user adding the record to history'),
+       'type' => 'int',
+       'not null' => TRUE,
+       ),
+     'history_datetime' => array(
+       'description' => t('The date and time the record was added to history'),
+       'mysql_type' => 'datetime',
+       'type' => 'varchar',
+       'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('season_team_player_historyid'),
+); 
+
+$schema['penalty'] = array(
+  'description' => t('Penalty Lookup table'),
+  'fields' => array(
+    'penaltyid' => array(
+      'description' => t('Penalty Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('Penalty Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('penaltyid'),
+);  
+
+$schema['penalty_history'] = array(
+  'description' => t('Penalty lookup table history'),
+  'fields' => array(
+    'penalty_historyid' => array(
+      'description' => t('Penalty History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'penaltyid' => array(
+      'description' => t('Penalty Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('Penalty Name'),
+       'type' => 'varchar',
+       'length' => '255',
+       'not null' => TRUE,
+      ), 
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('penalty_historyid'),
+);  
+
+$schema['game_player'] = array(
+  'description' => t('Players that were in a game'),
+  'fields' => array(
+    'game_playerid' => array(
+      'description' => t('Game Player Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'teamid' => array(
+      'description' => t('Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),       
+    'playerid' => array(
+      'description' => t('Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'goalie_yn' => array(
+      'description' => t('Is goalie for the game'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),     
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_playerid'),
+);  
+
+$schema['game_player_history'] = array(
+  'description' => t('Players in a game history'),
+  'fields' => array(
+    'game_player_historyid' => array(
+      'description' => t('Game Player Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'game_playerid' => array(
+      'description' => t('Game Player Primary Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'teamid' => array(
+      'description' => t('Team Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),       
+    'playerid' => array(
+      'description' => t('Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'goalie_yn' => array(
+      'description' => t('Is goalie for the game'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),            
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_player_historyid'),
+);  
+
+
+$schema['game_score'] = array(
+  'description' => t('Game Score'),
+  'fields' => array(
+    'game_scoreid' => array(
+      'description' => t('Game Score Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'period' => array(
+      'description' => t('Period the goal was scored'),
+      'type' => 'int',
+      ),
+     'time' => array(
+       'description' => t('Time the goal was scored'),
+       'type' => 'varchar',
+       'length' => '255',
+      ), 
+    'playerid' => array(
+      'description' => t('Goal Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'assist_playerid' => array(
+      'description' => t('Assist Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'second_assist_playerid' => array(
+      'description' => t('Second Assist Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_scoreid'),
+);  
+
+$schema['game_score_history'] = array(
+  'description' => t('Game Score History'),
+  'fields' => array(
+    'game_score_historyid' => array(
+      'description' => t('Game Score History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'game_scoreid' => array(
+      'description' => t('Game Score Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'period' => array(
+      'description' => t('Period the goal was scored'),
+      'type' => 'int',
+      ),
+     'time' => array(
+       'description' => t('Time the goal was scored'),
+       'type' => 'varchar',
+       'length' => '255',
+      ), 
+    'playerid' => array(
+      'description' => t('Goal Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'assist_playerid' => array(
+      'description' => t('Assist Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'second_assist_playerid' => array(
+      'description' => t('Second Assist Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_score_historyid'),
+);  
+
+$schema['game_penalty'] = array(
+  'description' => t('Game Penalty'),
+  'fields' => array(
+    'game_penaltyid' => array(
+      'description' => t('Game Penalty Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'period' => array(
+      'description' => t('Period the goal was scored'),
+      'type' => 'int',
+      ),
+     'time' => array(
+       'description' => t('Time the goal was scored'),
+       'type' => 'varchar',
+       'length' => '255',
+      ), 
+    'playerid' => array(
+      'description' => t('Penalty Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'penaltyid' => array(
+      'description' => t('Penalty Foreign Key'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_penaltyid'),
+);  
+
+$schema['game_penalty_history'] = array(
+  'description' => t('Game Penalty History'),
+  'fields' => array(
+    'game_penalty_historyid' => array(
+      'description' => t('Game Penalty Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'game_penaltyid' => array(
+      'description' => t('Game Penalty Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'gameid' => array(
+      'description' => t('Game Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'period' => array(
+      'description' => t('Period the goal was scored'),
+      'type' => 'int',
+      ),
+     'time' => array(
+       'description' => t('Time the goal was scored'),
+       'type' => 'varchar',
+       'length' => '255',
+      ), 
+    'playerid' => array(
+      'description' => t('Penalty Player Foreign Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'penaltyid' => array(
+      'description' => t('Penalty Foreign Key'),
+      'type' => 'int',
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('game_penalty_historyid'),
+);  
+
+
+  return $schema;
+}
+
+function hockey_stats_install() {
+
+  $current_date = date("Y-m-d H:i:s");
+
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Left Wing',
+      'abbreviation' => 'LW',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Center',
+      'abbreviation' => 'C',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Right Wing',
+      'abbreviation' => 'RW',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Forward',
+      'abbreviation' => 'F',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+  
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Defence',
+      'abbreviation' => 'D',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+
+  db_insert('player_position')
+    ->fields(array(
+      'name' => 'Goalie',
+      'abbreviation' => 'G',
+      'saved_userid' => 0,
+      'saved_datetime' => $current_date,
+    ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Charging',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Closing hand on puck',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Cross-checking',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Diving',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Delay of game',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Elbowing',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Goalkeeper interference',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'High-sticking',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Holding',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Holding the stick',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Hooking',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Illegal equipment',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Illegal stick',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Instigator',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Interference',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Kneeing',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Roughing',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+   db_insert('penalty')
+      ->fields(array(
+        'name' => 'Slashing',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Throwing stick',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Tripping',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Unsportsmanlike conduct',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Abuse of officials',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Delay of game',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Face-off violation',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Too many men on the ice',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Boarding',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Charging',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Checking from behind',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Fighting',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+    
+    db_insert('penalty')
+      ->fields(array(
+        'name' => 'Spearing',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+      ))
+    ->execute();
+
+}

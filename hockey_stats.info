@@ -1,0 +1,6 @@
+name = Hockey Stats
+description = Admin pages and views for the Hockey Stats Module
+core = 7.x
+package = Hockey Stats
+dependencies[] = views
+scripts[] = includes/main.js
