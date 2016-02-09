@@ -147,6 +147,18 @@ class SeasonTeam implements CrudInterface {
 
     return $players;
   }
+  
+  public function getPlayerList() {
+    $players = array();
+    $players = $this->getSeasonTeamPlayers();
+    $playerList = array();
+    
+    foreach ($players as $player) {
+      $playerList[$player->getPlayerId()] = $player->getFullName();
+    }
+    
+    return $playerList;
+  }
 
   public function getSeasonTeamPlayerIdList() {
 
@@ -243,16 +255,46 @@ class SeasonTeam implements CrudInterface {
 
   public function getDefaultGoalie() {
     // find the goalie based on the number of games played for the team and the players position
+    $goalie = NULL;
+    
+    // query shold be something like
     /*
-    select gp.*
-from season_team st
-inner join game g on g.seasonid = st.seasonid
-	and (g.home_teamid = st.teamid or g.visiting_teamid = st.teamid)
-inner join game_player gp on gp.gameid = g.gameid
-	and gp.teamid = st.teamid
-	and gp.goalie_yn = 1
-where st.season_teamid = 6
+    select gp.playerid, count(gp.playerid) as count
+    from game g
+    inner join game_player gp on gp.gameid = g.gameid
+      and gp.teamid = 1
+      and gp.goalie_yn = 1
+    where g.seasonid = 5
+    AND (g.home_teamid = 1 OR g.visiting_teamid = 1)
+    GROUP BY gp.playerid
+    order by count DESC
+    LIMIT 1 OFFSET 0; 
     */
+    
+    $or = db_or()
+         ->condition('g.home_teamid', $this->getTeamId())
+         ->condition('g.visiting_teamid', $this->getTeamId());
+    
+    $query = db_select('game', 'g')
+      ->condition('g.seasonid', $this->getSeasonId())
+      ->condition($or);
+    $query->innerJoin('game_player', 'gp', 'gp.gameid = g.gameid');
+    $query->condition('gp.teamid', $this->getTeamId());
+    $query->condition('gp.goalie_yn', '1');
+    $query->addField('gp', 'playerid');
+    $query->addExpression('COUNT(gp.playerid)', 'ncount');
+    $query->groupBy('gp.playerid');
+    $query->orderBy('ncount', 'DESC');
+    $query->range(0,1);//LIMIT to 1 record
+    $result = $query->execute();
+
+    $record = $result->fetchAssoc();
+      
+    if (isset($record)) {
+      $goalie = new Player($record['playerid']);
+    }
+
+    return $goalie;
   }
 
 }

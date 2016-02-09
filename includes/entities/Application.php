@@ -7,6 +7,7 @@ class Application {
   private $locations = NULL;
   private $players = NULL;
   private $playerPositions = NULL;
+  private $penalties;
   
   public function getLeagues() {
     if ($this->leagues == NULL) {
@@ -308,4 +309,39 @@ class Application {
 
     return $playerPositions;
   }
+  
+  public function getPenalties() {
+    if($this->penalties == NULL) {
+      $this->penalties = $this->getAllPenalties();
+    }
+    
+    return $this->penalties;
+  }
+  
+  private function getAllPenalties() {
+    $penalties = array();
+
+    $result = db_select('penalty', 'p')
+      ->fields('p')
+      ->orderBy('p.name')
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $penalties[$record['penaltyid']] = $record['name'];
+    }
+
+    return $penalties;
+  }
+  
+  public function getPeriodList() {
+    $periods = array();
+    
+    $periods['1'] = '1';
+    $periods['2'] = '2';
+    $periods['3'] = '3';
+    $periods['OT'] = 'OT';
+    
+    return $periods;
+  }
+  
 }

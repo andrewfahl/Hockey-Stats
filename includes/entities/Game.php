@@ -45,7 +45,7 @@ class Game implements CrudInterface {
     $this->setVisitingTeamName($visistingTeamName);
     $this->setLocationName($locationName);
   }
-
+  
   public function setSavedDateTimeAndUser($savedDateTime, $savedUserID) {
     $this->setSavedUserID($savedUserID);
     $this->setSavedDateTime($savedDateTime);
@@ -199,17 +199,17 @@ class Game implements CrudInterface {
            'saved_datetime' => $current_game->getSavedDateTime(),
            'history_userid' => $this->getSavedUserID(),
            'history_datetime' => $this->getSavedDateTime(),
-           'home_team_first_period_goals' => $this->getHomeTeamFirstPeriodGoals(),
-           'visiting_team_first_period_goals' => $this->getVisitingTeamFirstPeriodGoals(),
-           'home_team_second_period_goals' => $this->getHomeTeamSecondPeriodGoals(),
-           'visiting_team_second_period_goals' => $this->getVisitingTeamSecondPeriodGoals(),
-           'home_team_third_period_goals' => $this->getHomeTeamThirdPeriodGoals(),
-           'visiting_team_third_period_goals' => $this->getVisitingTeamThirdPeriodGoals(),
-           'home_team_over_time_goals' => $this->getHomeTeamOverTimeGoals(),
-           'visiting_team_over_time_goals' => $this->getVisitingTeamOverTimeGoals(),
-           'home_team_shots' => $this->getHomeTeamShots(),
-           'visiting_team_shots' => $this->getVisitingTeamShots(),
-           'comment' => $this->getComment()
+           'home_team_first_period_goals' => $current_game>getHomeTeamFirstPeriodGoals(),
+           'visiting_team_first_period_goals' => $current_game->getVisitingTeamFirstPeriodGoals(),
+           'home_team_second_period_goals' => $current_game->getHomeTeamSecondPeriodGoals(),
+           'visiting_team_second_period_goals' => $current_game->getVisitingTeamSecondPeriodGoals(),
+           'home_team_third_period_goals' => $current_game->getHomeTeamThirdPeriodGoals(),
+           'visiting_team_third_period_goals' => $current_game->getVisitingTeamThirdPeriodGoals(),
+           'home_team_over_time_goals' => $current_game->getHomeTeamOverTimeGoals(),
+           'visiting_team_over_time_goals' => $current_game->getVisitingTeamOverTimeGoals(),
+           'home_team_shots' => $current_game->getHomeTeamShots(),
+           'visiting_team_shots' => $current_game->getVisitingTeamShots(),
+           'comment' => $current_game->getComment()
         )
       )
       ->execute();
@@ -556,5 +556,27 @@ class Game implements CrudInterface {
     
     return $players;
   }
+
+  public function getGameDescription() {
+    $value = NULL;
     
+    if (isset($this->visitingTeamName) && isset($this->homeTeamName)) {
+      $value = $this->visitingTeamName . ' at ' . $this->homeTeamName;
+    }
+    
+    return $value;
+  }
+  
+  public function getAllPlayersList() {
+    $homeTeam = new SeasonTeam(NULL, $this->getSeasonId(), $this->getHomeTeamId());
+    $homeTeam->build();
+    $homeTeamPlayers = array($this->getHomeTeamName() => $homeTeam->getPlayerList());
+    
+    $visitingTeam = new SeasonTeam(NULL, $this->getSeasonId(), $this->getVisitingTeamId());
+    $visitingTeam->build();
+    $visitingTeamPlayers = array($this->getVisitingTeamName() => $visitingTeam->getPlayerList());
+    
+    return $visitingTeamPlayers + $homeTeamPlayers;
+  }
+  
 }

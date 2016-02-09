@@ -59,7 +59,7 @@ class Season implements CrudInterface {
                     'leagueid' => $this->getLeagueId(),
                     'name' => $this->getName(),
                     'start_datetime' => $this->getStartDateTime(),
-                    'save_userid' => $this->getSavedUserID(),
+                    'saved_userid' => $this->getSavedUserID(),
                     'saved_datetime' => $this->getSavedDateTime(),
                         )
                 )
@@ -293,4 +293,22 @@ class Season implements CrudInterface {
 
       return $returnValue;
     }
+    
+    /*
+     * NOT TESTED
+    public function getTeam($teamid) {
+      $returnTeam = NULL;
+
+      $teams = $this->getSeasonTeams();
+
+      foreach ($teams as $team) {
+        if($team->getTeamId() == $teamid) {
+          $returnTeam = $team;
+          BREAK;
+        }
+      }
+
+      return $returnTeam;
+    }
+     */
 }

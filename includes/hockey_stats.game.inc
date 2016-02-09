@@ -873,6 +873,8 @@ function hockey_stats_game_attendance($form, &$form_state) {
   $home_team_playerids = $game->getHomeTeamPlayerIds();
   $visiting_team_playerids = $game->getVisitingTeamPlayerIds();
 
+  $default_visiting_goalie = $visiting_season_team->getDefaultGoalie();
+  
   // visiting team roster
   $form['visiting_team'] = array(
        '#type' => 'fieldset',
@@ -891,8 +893,14 @@ function hockey_stats_game_attendance($form, &$form_state) {
   }
 
   $visiting_goalie = $game->getVisitingTeamGoalie();
+  
   // if null just pass an empty object
-  if ($visiting_goalie == NULL) {
+  if (!isset($visiting_goalie)) {
+    $visiting_goalie = $visiting_season_team->getDefaultGoalie();
+  }
+  
+  // if null just pass an empty object
+  if (!isset($visiting_goalie)) {
     $visiting_goalie = new GamePlayer(0, 0, 0);
   }
 
@@ -927,8 +935,14 @@ function hockey_stats_game_attendance($form, &$form_state) {
   }
 
   $home_goalie = $game->getHomeTeamGoalie();
+  
+    // if null just pass an empty object
+  if (!isset($home_goalie)) {
+    $home_goalie = $visiting_season_team->getDefaultGoalie();
+  }
+  
   // if null just pass an empty object
-  if ($home_goalie == NULL) {
+  if (!isset($home_goalie)) {
     $home_goalie = new GamePlayer(0, 0, 0);
   }
 
@@ -976,8 +990,13 @@ function hockey_stats_game_attendance_submit($form, &$form_state) {
     $home_team_playerids = $form_state['input']['home_players'];
 
     // remove nulls and 0's from the lists of players
-    Utility::removeValues($visiting_team_playerids, [0, NULL]);
-    Utility::removeValues($home_team_playerids, [0, NULL]);
+    if(isset($visiting_team_playerids)) {
+      Utility::removeValues($visiting_team_playerids, [0, NULL]);
+    }
+    
+    if(isset($home_team_playerids)) { 
+      Utility::removeValues($home_team_playerids, [0, NULL]);
+    }
 
     // set the goalie player ids
     $home_goalie_playerid = $form_state['input']['home_goalie_playerid'];
@@ -997,12 +1016,16 @@ function hockey_stats_game_attendance_submit($form, &$form_state) {
       $previous_visiting_goalie_playerid = $previous_visiting_goalie->getPlayerId();
     }
 
-    // set the home attendance
-    hockey_stats_game_set_attendance($game->getGameId(), $game->getHomeTeamId(), $home_team_playerids, $previous_home_team_playerids, $home_goalie_playerid, $previous_home_goalie_playerid);
-
-    // set the visiting team attendance
-    hockey_stats_game_set_attendance($game->getGameId(), $game->getVisitingTeamId(), $visiting_team_playerids, $previous_visiting_team_playerids, $visiting_goalie_playerid, $previous_visiting_goalie_playerid);
-
+    // set the home attendance if there are players
+    if(isset($home_team_playerids)) {
+      hockey_stats_game_set_attendance($game->getGameId(), $game->getHomeTeamId(), $home_team_playerids, $previous_home_team_playerids, $home_goalie_playerid, $previous_home_goalie_playerid);
+    }
+    
+    // set the visiting team attendance if there are players
+    if(isset($visiting_team_playerids)) {
+      hockey_stats_game_set_attendance($game->getGameId(), $game->getVisitingTeamId(), $visiting_team_playerids, $previous_visiting_team_playerids, $visiting_goalie_playerid, $previous_visiting_goalie_playerid);
+    }
+    
     drupal_set_message(t('Player Attendance has been saved'));
   }
 
@@ -1100,6 +1123,56 @@ function hockey_stats_game_goals_submit($form, &$form_state) {
 }
 
 function hockey_stats_game_penalties($form, &$form_state) {
+  
+  if (isset($form_state['input']['gameId'])) {
+    $game = new Game($form_state['input']['gameId']);
+    $game->build();
+  }
+
+  if (!isset($game)) {
+    throw(new Exception("Game not found"));
+  }
+  
+  $application = new Application();
+  
+  $form['penalties'] = array(
+       '#type' => 'fieldset',
+       '#title' => t('Penalties for ' . $game->getGameDescription()),
+  );
+    
+  // display all penalties for that game
+    // need a delete checkbox
+  
+  // add new penalty
+  $form['penalties']['period'] = array(
+       '#type' => 'select',
+       '#title' => t('Period'),
+       '#options' => array(0 => '') + $application->getPeriodList(), 
+  );
+  
+  $form['penalties']['player'] = array(
+       '#type' => 'select',
+       '#title' => t('Player'),
+       '#options' => $game->getAllPlayersList(), 
+  );
+  
+  // hidden field 
+  $form['gameId'] = array(
+       '#type' => 'hidden',
+       '#value' => $game->getGameId(),
+  );
+       
+  // buttons
+  $form['save'] = array(
+       '#type' => 'submit',
+       '#value' => 'Save and Add Another',
+  );
+    
+  $form['submit'] = array(
+       '#type' => 'submit',
+       '#value' => 'Submit',
+  );
+  
   $form['cancel'] = Utility::getCancelButton();
 
   return $form;

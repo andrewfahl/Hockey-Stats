@@ -311,5 +311,4 @@ class Team implements CrudInterface {
     public function setSavedDateTime($savedDateTime) {
         $this->savedDateTime = $savedDateTime;
     }
-    
 }
