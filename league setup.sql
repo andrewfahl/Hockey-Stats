@@ -24,17 +24,17 @@ truncate table season_team_player;
 truncate table season_team_player_history;
 
 # add leagues
-INSERT INTO league(`name`,`sequence`,`active_by_default_yn`,`saved_userid`,`saved_datetime`)
-VALUES('A League',1,1,0,NOW());
+INSERT INTO league(`name`,`sequence`,`saved_userid`,`saved_datetime`)
+VALUES('A League',1,1,NOW());
 
-INSERT INTO league(`name`,`sequence`,`active_by_default_yn`,`saved_userid`,`saved_datetime`)
-VALUES('B League',2,0,0,NOW());
+INSERT INTO league(`name`,`sequence`,`saved_userid`,`saved_datetime`)
+VALUES('B League',2,0,NOW());
 
-INSERT INTO league(`name`,`sequence`,`active_by_default_yn`,`saved_userid`,`saved_datetime`)
-VALUES('C League',3,0,0,NOW());
+INSERT INTO league(`name`,`sequence`,`saved_userid`,`saved_datetime`)
+VALUES('C League',3,0,NOW());
 
-INSERT INTO league(`name`,`sequence`,`active_by_default_yn`,`saved_userid`,`saved_datetime`)
-VALUES('D League',4,0,0,NOW());
+INSERT INTO league(`name`,`sequence`,`saved_userid`,`saved_datetime`)
+VALUES('D League',4,0,NOW());
 
 # add seasons
 INSERT INTO season(`leagueid`,`name`,`start_datetime`,`saved_userid`,`saved_datetime`)

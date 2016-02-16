@@ -23,7 +23,8 @@ function hockey_stats_auto_load_files() {
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Game.php';
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/Player.php';
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/PlayerPosition.php';
-    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePlayer.php';    
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePlayer.php';
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePenalty.php';  
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/Utility.php';
 }
 
@@ -260,6 +261,33 @@ function hockey_stats_menu() {
         'file'             => 'hockey_stats.game.inc',
         'type'             => MENU_CALLBACK,
     );
+    
+    $items['base/game/penalties/add'] = array(
+        'title'            => 'Penalties',
+        'page callback'    => 'hockey_stats_game_penalties_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );    
+
+    $items['base/game/penalties/edit'] = array(
+        'title'            => 'Penalties',
+        'page callback'    => 'hockey_stats_game_penalties_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );     
+    
+    $items['base/game/penalties/delete'] = array(
+        'title'            => 'Penalties',
+        'page callback'    => 'hockey_stats_game_penalties_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.game.inc',
+        'type'             => MENU_CALLBACK,
+    );    
     
     $items['base/game/attendance'] = array(
         'title'            => 'Attendance',

@@ -1298,8 +1298,8 @@ $schema['game_penalty'] = array(
        'type' => 'varchar',
        'length' => '255',
       ), 
-    'playerid' => array(
-      'description' => t('Penalty Player Foreign Key'),
+    'season_team_playerid' => array(
+      'description' => t('Season Team Player'),
       'type' => 'int',
       'not null' => TRUE,
       ),
@@ -1307,6 +1307,11 @@ $schema['game_penalty'] = array(
       'description' => t('Penalty Foreign Key'),
       'type' => 'int',
       ),
+     'penalty_durationid' => array(
+       'description' => t('The penalty duration primary key'),
+       'type' => 'int',
+       'not null' => TRUE,
+      ), 
     'saved_userid' => array(
       'description' => t('The user saving the record'),
       'type' => 'int',
@@ -1349,8 +1354,8 @@ $schema['game_penalty_history'] = array(
        'type' => 'varchar',
        'length' => '255',
       ), 
-    'playerid' => array(
-      'description' => t('Penalty Player Foreign Key'),
+    'season_team_playerid' => array(
+      'description' => t('Season Team Player'),
       'type' => 'int',
       'not null' => TRUE,
       ),
@@ -1358,6 +1363,11 @@ $schema['game_penalty_history'] = array(
       'description' => t('Penalty Foreign Key'),
       'type' => 'int',
       ),
+     'penalty_durationid' => array(
+       'description' => t('The penalty duration primary key'),
+       'type' => 'int',
+       'not null' => TRUE,
+      ),        
     'saved_userid' => array(
       'description' => t('The user saving the record'),
       'type' => 'int',
@@ -1384,6 +1394,88 @@ $schema['game_penalty_history'] = array(
   'primary key' => array('game_penalty_historyid'),
 );  
 
+
+$schema['penalty_duration'] = array(
+  'description' => t('Penalty Duration'),
+  'fields' => array(
+    'penalty_durationid' => array(
+      'description' => t('Penalty Duration Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('How the duration should display'),
+       'type' => 'varchar',
+       'length' => '255',
+      ),       
+    'length' => array(
+      'description' => t('The duration in seconds'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('penalty_durationid'),
+);  
+
+$schema['penalty_duration_history'] = array(
+  'description' => t('Game Penalty Duration History'),
+  'fields' => array(
+    'penalty_duration_historyid' => array(
+      'description' => t('Penalty Duration History Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+    'penalty_durationid' => array(
+      'description' => t('Penalty Duration Primary Key'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),      
+     'name' => array(
+       'description' => t('How the duration should display'),
+       'type' => 'varchar',
+       'length' => '255',
+      ),       
+    'length' => array(
+      'description' => t('The duration in seconds'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    'history_userid' => array(
+      'description' => t('The user adding the record to history'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'history_datetime' => array(
+      'description' => t('The date and time the record was added to history'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),       
+    ),
+  'primary key' => array('penalty_duration_historyid'),
+);  
 
   return $schema;
 }
@@ -1685,5 +1777,40 @@ function hockey_stats_install() {
         'saved_datetime' => $current_date,
       ))
     ->execute();
-
+    
+    db_insert('penalty_duration')
+    ->fields(array(
+        'name' => '2:00',
+        'length' => '120',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();
+    
+    db_insert('penalty_duration')
+    ->fields(array(
+        'name' => '4:00',
+        'length' => '240',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();    
+    
+    db_insert('penalty_duration')
+    ->fields(array(
+        'name' => '5:00',
+        'length' => '300',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();    
+    
+    db_insert('penalty_duration')
+    ->fields(array(
+        'name' => '10:00',
+        'length' => '600',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();      
 }

@@ -152,9 +152,8 @@ class SeasonTeam implements CrudInterface {
     $players = array();
     $players = $this->getSeasonTeamPlayers();
     $playerList = array();
-    
     foreach ($players as $player) {
-      $playerList[$player->getPlayerId()] = $player->getFullName();
+      $playerList[$player->getSeasonTeamPlayerId()] = $player->getFullName();
     }
     
     return $playerList;

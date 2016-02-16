@@ -10,6 +10,7 @@ class Utility {
 
   const COOKIE_LEAGUEID = 'leagueid';
   const COOKIE_SEASONID = 'seasonid';
+  const COOKIE_GAMEID = 'gameid';
   
   public static function currentDate() {
       return date("Y-m-d H:i:s");

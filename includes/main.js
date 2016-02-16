@@ -1,5 +1,8 @@
 jQuery(document).ready(function () {
     jQuery('.setFocusOnLoad').focus();
+    jQuery('.preventDefault').click(function(event){
+        event.preventDefault();
+        }); 
 });
 
 function leagueEdit(leagueId) {
@@ -168,6 +171,32 @@ function playerPostTo() {
     jQuery('#hockey-stats-player-landing').attr('action', '/?q=base/player/'+goTo);
     jQuery('#hockey-stats-player-landing').submit();
 }
+
+function penaltyEdit(gamePenaltyId) {
+    jQuery('#formAction').val('edit');
+    jQuery('#gamePenaltyId').val(gamePenaltyId);
+    penaltyPostTo();
+}
+
+function penaltyDelete(gamePenaltyId) {
+    jQuery('#formAction').val('delete');
+    jQuery('#gamePenaltyId').val(gamePenaltyId);
+    penaltyPostTo();
+}
+
+function penaltyAdd(gamePenaltyId) {
+    jQuery('#formAction').val('add');
+    jQuery('#gamePenaltyId').val(gamePenaltyId);
+    penaltyPostTo();
+}
+
+function penaltyPostTo() { 
+    var goTo = jQuery('#formAction').val();
+
+    jQuery('#hockey-stats-game-penalties-landing').attr('action', '/?q=base/game/penalties/'+goTo);
+    jQuery('#hockey-stats-game-penalties-landing').submit();    
+}
+
 
 function setCookieSeasonId(seasonId) {
     jQuery.cookie("seasonid", seasonId);

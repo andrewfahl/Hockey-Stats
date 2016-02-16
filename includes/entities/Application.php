@@ -339,9 +339,28 @@ class Application {
     $periods['1'] = '1';
     $periods['2'] = '2';
     $periods['3'] = '3';
-    $periods['OT'] = 'OT';
+    $periods['4'] = 'OT';
     
     return $periods;
+  }
+  
+  public function getPenaltyDurationList() {
+    $penalty_durations = array();
+
+    $result = db_select('penalty_duration', 'pd')
+      ->fields('pd')
+      ->orderBy('pd.length')
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $penalty_durations[$record['penalty_durationid']] = $record['name'];
+    }
+
+    return $penalty_durations;
+  }
+  
+  public function isValidPeriod($value) {
+    return array_key_exists($value, $this->getPeriodList());
   }
   
 }

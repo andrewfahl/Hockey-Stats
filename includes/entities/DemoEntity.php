@@ -87,8 +87,8 @@ class DemoEntity implements CrudInterface {
   
   private function history() {
     /*
-    $current_location = new Location($this->getLocationId());
-    $current_location->build();
+    $current = new Location($this->getLocationId());
+    $current->build();
 
     db_insert('location_history')
       ->fields(array(
@@ -99,8 +99,8 @@ class DemoEntity implements CrudInterface {
            'city' => $current_location->getCity(),
            'state' => $current_location->getState(),
            'zip' => $current_location->getZip(),
-           'saved_userid' => $current_location->getSavedUserID(),
-           'saved_datetime' => $current_location->getSavedDateTime(),
+           'saved_userid' => $current->getSavedUserID(),  #this is the current value
+           'saved_datetime' => $current->getSavedDateTime(),  #this is the current value
            'history_userid' => $this->getSavedUserID(),
            'history_datetime' => $this->getSavedDateTime(),
         )
