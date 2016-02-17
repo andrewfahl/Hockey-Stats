@@ -339,7 +339,7 @@ class Application {
     $periods['1'] = '1';
     $periods['2'] = '2';
     $periods['3'] = '3';
-    $periods['4'] = 'OT';
+    $periods['OT'] = 'OT';
     
     return $periods;
   }

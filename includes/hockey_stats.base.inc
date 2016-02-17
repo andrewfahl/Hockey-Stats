@@ -44,6 +44,8 @@ function hockey_stats_home_page_content() {
     $html .= '<li>Identify Team Captain (maybe with contact info)</li>';
     $html .= '<li>Cleanup the js</li>';
     $html .= '<li>Players on suspension</li>';
+    $html .= '<li>Players awards section</li>';
+    $html .= '<li>Build a player view model so we can stop adding first and last name fields every where</li>';
     $html .= '</ul>';
 
     $html .= "Inquire about:";

@@ -7,13 +7,20 @@ class GamePenalty implements CrudInterface {
   private $period;
   private $time;
   private $seasonTeamPlayerId;
+  private $playerFirstName;
+  private $playerLastName;
   private $penaltyId;
+  private $penaltyName;
   private $penaltyDurationId;
+  private $penaltyDuration;
+  private $teamName;
   private $savedDateTime = NULL;
   private $savedUserID = 0;
   
   function __construct($gamePenaltyId = 0, $gameId = 0, $period = 0, 
-    $time = NULL, $seasonTeamPlayerId = 0, $penaltyId = 0, $penaltyDurationId = NULL) {
+    $time = NULL, $seasonTeamPlayerId = 0, $penaltyId = 0, $penaltyDurationId = NULL,
+    $playerFirstName = NULL, $playerLastName = NULL, $penaltyName = NULL, 
+    $penaltyDuration = NULL, $teamName = NULL) {
 
     $this->setGamePenaltyId($gamePenaltyId);
     $this->setGameId($gameId );
@@ -22,6 +29,11 @@ class GamePenalty implements CrudInterface {
     $this->setSeasonTeamPlayerId($seasonTeamPlayerId);
     $this->setPenaltyId($penaltyId);
     $this->setPenaltyDurationId($penaltyDurationId);
+    $this->setPlayerFirstName($playerFirstName);
+    $this->setPlayerLastName($playerLastName);
+    $this->setPenaltyName($penaltyName);
+    $this->setPenaltyDuration($penaltyDuration);
+    $this->setTeamName($teamName);
   }
     
   public function setSavedDateTimeAndUser($savedDateTime, $savedUserID) {
@@ -31,11 +43,22 @@ class GamePenalty implements CrudInterface {
   
   public function build() {
     
-    $result = db_select('game_penalty', 'gp')
-      ->fields('gp')
-      ->condition('game_penaltyid', $this->getGamePenaltyId())
-      ->execute();
-
+    $query = db_select('game_penalty', 'gp');
+    $query->innerJoin('season_team_player', 'stp', 'stp.season_team_playerid = gp.season_team_playerid');
+    $query->innerJoin('season_team', 'st', 'st.season_teamid = stp.season_teamid');    
+    $query->innerJoin('team', 't', 'st.teamid = t.teamid');
+    $query->innerJoin('player', 'p', 'p.playerid = stp.playerid');
+    $query->innerJoin('penalty_duration', 'gpd', 'gpd.penalty_durationid = gp.penalty_durationid');
+    $query->innerJoin('penalty', 'pen', 'pen.penaltyid = gp.penaltyid');
+    $query->fields('gp');
+    $query->addField('p', 'first_name');
+    $query->addField('p', 'last_name');
+    $query->addField('t', 'name', 'teamName');
+    $query->addField('gpd', 'name', 'penaltyDuration');
+    $query->addField('pen', 'name', 'penaltyName');
+    $query->condition('game_penaltyid', $this->getGamePenaltyId());
+    $result = $query->execute();
+   
     $record = $result->fetchAssoc();
 
     if (isset($record)) {
@@ -46,7 +69,12 @@ class GamePenalty implements CrudInterface {
       $this->setSeasonTeamPlayerId($record['season_team_playerid']);
       $this->setPenaltyId($record['penaltyid']);
       $this->setPenaltyDurationId($record['penalty_durationid']);
-      $this->setSavedDateTimeAndUser($record['saved_datetime'], $record['saved_userid']);
+      $this->setPlayerFirstName($record['first_name']);
+      $this->setPlayerLastName($record['last_name']);
+      $this->setPenaltyName($record['penaltyName']);
+      $this->setPenaltyDuration($record['penaltyDuration']);
+      $this->setTeamName($record['teamName']);
+      $this->setSavedDateTimeAndUser($record['saved_datetime'], $record['saved_userid']);      
     }
     else {
       throw new Exception('Game Penalty Not Found');
@@ -208,7 +236,47 @@ class GamePenalty implements CrudInterface {
   public function setPenaltyDurationId($penaltyDurationId) {
     $this->penaltyDurationId = $penaltyDurationId;
   }
- 
+  
+  public function getPlayerFirstName() {
+    return $this->playerFirstName;
+  }
+
+  public function setPlayerFirstName($playerFirstName) {
+    $this->playerFirstName = $playerFirstName;
+  }
+
+  public function getPlayerLastName() {
+    return $this->playerLastName;
+  }
+
+  public function setPlayerLastName($playerLastName) {
+    $this->playerLastName = $playerLastName;
+  }
+  
+  public function getPenaltyName() {
+    return $this->penaltyName;
+  }
+
+  public function setPenaltyName($penaltyName) {
+    $this->penaltyName = $penaltyName;
+  }
+
+  public function getPenaltyDuration() {
+    return $this->penaltyDuration;
+  }
+  
+  public function setPenaltyDuration($penaltyDuration) {
+    $this->penaltyDuration = $penaltyDuration;
+  }  
+  
+  public function getTeamName() {
+    return $this->teamName;
+  }
+  
+  public function setTeamName($teamName) {
+    $this->teamName = $teamName;
+  }
+
   public function getSavedUserID() {
     return $this->savedUserID;
   }

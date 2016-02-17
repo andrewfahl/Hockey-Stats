@@ -1291,9 +1291,10 @@ $schema['game_penalty'] = array(
       ),
     'period' => array(
       'description' => t('Period the goal was scored'),
-      'type' => 'int',
+      'type' => 'varchar',
+      'length' => '255',
       ),
-     'time' => array(
+    'time' => array(
        'description' => t('Time the goal was scored'),
        'type' => 'varchar',
        'length' => '255',
@@ -1307,7 +1308,7 @@ $schema['game_penalty'] = array(
       'description' => t('Penalty Foreign Key'),
       'type' => 'int',
       ),
-     'penalty_durationid' => array(
+    'penalty_durationid' => array(
        'description' => t('The penalty duration primary key'),
        'type' => 'int',
        'not null' => TRUE,
@@ -1347,7 +1348,8 @@ $schema['game_penalty_history'] = array(
       ),
     'period' => array(
       'description' => t('Period the goal was scored'),
-      'type' => 'int',
+      'type' => 'varchar',
+      'length' => '255',
       ),
      'time' => array(
        'description' => t('Time the goal was scored'),

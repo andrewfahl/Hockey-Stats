@@ -155,7 +155,7 @@ class Season implements CrudInterface {
 
       $result = $query->execute();
 
-    while($record = $result->fetchAssoc()) {
+      while($record = $result->fetchAssoc()) {
             $addGame = new Game($record['gameid'], $record['home_teamid'], 
               $record['visiting_teamid'], $record['locationid'], 
               $record['seasonid'], $record['start_datetime'], $record['playoff_game_yn'],

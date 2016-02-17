@@ -258,34 +258,34 @@ function hockey_stats_menu() {
         'page callback'    => 'hockey_stats_game_penalties_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.penalty.inc',
         'type'             => MENU_CALLBACK,
     );
     
     $items['base/game/penalties/add'] = array(
-        'title'            => 'Penalties',
+        'title'            => 'Add Penalty',
         'page callback'    => 'hockey_stats_game_penalties_add_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.penalty.inc',
         'type'             => MENU_CALLBACK,
     );    
 
     $items['base/game/penalties/edit'] = array(
-        'title'            => 'Penalties',
+        'title'            => 'Edit Penalty',
         'page callback'    => 'hockey_stats_game_penalties_edit_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.penalty.inc',
         'type'             => MENU_CALLBACK,
     );     
     
     $items['base/game/penalties/delete'] = array(
-        'title'            => 'Penalties',
+        'title'            => 'Delete Penalty',
         'page callback'    => 'hockey_stats_game_penalties_delete_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.penalty.inc',
         'type'             => MENU_CALLBACK,
     );    
     

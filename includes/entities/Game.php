@@ -29,6 +29,7 @@ class Game implements CrudInterface {
   private $visitingTeamPlayers;
   private $homeTeamGoalie;
   private $visitingTeamGoalie;
+  private $penalties;
   
   function __construct($gameId = 0, $homeTeamId = 0, $visitingTeamId = 0, 
     $locationId = 0, $seasonId = 0, $startDateTime = NULL, $playoffGameYN = 0,
@@ -438,6 +439,49 @@ class Game implements CrudInterface {
     $this->comment = $comment;
   }
   
+  public function getPenalties() {
+    if($this->penalties == NULL) {
+      $this->setPenalties($this->getAllPenalties());
+    }    
+    return $this->penalties;
+  }
+
+  public function setPenalties($penalties) {
+    $this->penalties = $penalties;
+  }
+  
+  private function getAllPenalties() {
+    $penalties = array();
+    
+    $query = db_select('game_penalty', 'gp');
+    $query->innerJoin('season_team_player', 'stp', 'stp.season_team_playerid = gp.season_team_playerid');
+    $query->innerJoin('season_team', 'st', 'st.season_teamid = stp.season_teamid');    
+    $query->innerJoin('team', 't', 'st.teamid = t.teamid');
+    $query->innerJoin('player', 'p', 'p.playerid = stp.playerid');
+    $query->innerJoin('penalty_duration', 'gpd', 'gpd.penalty_durationid = gp.penalty_durationid');
+    $query->innerJoin('penalty', 'pen', 'pen.penaltyid = gp.penaltyid');
+    $query->fields('gp');
+    $query->addField('p', 'first_name');
+    $query->addField('p', 'last_name');
+    $query->addField('t', 'name', 'teamName');
+    $query->addField('gpd', 'name', 'penaltyDuration');
+    $query->addField('pen', 'name', 'penaltyName');
+    $query->condition('gameid', $this->getGameId());
+    $query->orderBy('gp.period', 'DESC');
+    $query->orderBy('gp.time', 'DESC');
+    $result = $query->execute();
+    
+    while ($record = $result->fetchAssoc()) {
+      $penalties[$record['game_penaltyid']] = new GamePenalty($record['game_penaltyid'], 
+        $record['gameid'], $record['period'], $record['time'], 
+        $record['season_team_playerid'], $record['penaltyid'],
+        $record['penalty_durationid'], $record['first_name'], $record['last_name'], 
+        $record['penaltyName'], $record['penaltyDuration'], $record['teamName']);
+    }
+    
+    return $penalties;
+  }
+
   public function getHomeTeamPlayerIds() {
     
     if($this->getHomeTeamPlayers() == NULL) {
