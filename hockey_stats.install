@@ -1157,8 +1157,7 @@ $schema['game_player_history'] = array(
       ),
     ),
   'primary key' => array('game_player_historyid'),
-);  
-
+); 
 
 $schema['game_score'] = array(
   'description' => t('Game Score'),
@@ -1173,7 +1172,7 @@ $schema['game_score'] = array(
       'type' => 'int',
       'not null' => TRUE,
       ),
-    'period' => array(
+    'periodid' => array(
       'description' => t('Period the goal was scored'),
       'type' => 'int',
       ),
@@ -1228,7 +1227,7 @@ $schema['game_score_history'] = array(
       'type' => 'int',
       'not null' => TRUE,
       ),
-    'period' => array(
+    'periodid' => array(
       'description' => t('Period the goal was scored'),
       'type' => 'int',
       ),
@@ -1289,10 +1288,10 @@ $schema['game_penalty'] = array(
       'type' => 'int',
       'not null' => TRUE,
       ),
-    'period' => array(
-      'description' => t('Period the goal was scored'),
-      'type' => 'varchar',
-      'length' => '255',
+    'periodid' => array(
+      'description' => t('Period the penalty occured'),
+      'type' => 'int',
+      'not null' => TRUE,
       ),
     'time' => array(
        'description' => t('Time the goal was scored'),
@@ -1346,10 +1345,10 @@ $schema['game_penalty_history'] = array(
       'type' => 'int',
       'not null' => TRUE,
       ),
-    'period' => array(
-      'description' => t('Period the goal was scored'),
-      'type' => 'varchar',
-      'length' => '255',
+    'periodid' => array(
+      'description' => t('Period the penalty occured'),
+      'type' => 'int',
+      'not null' => TRUE,
       ),
      'time' => array(
        'description' => t('Time the goal was scored'),
@@ -1479,6 +1478,38 @@ $schema['penalty_duration_history'] = array(
   'primary key' => array('penalty_duration_historyid'),
 );  
 
+$schema['period'] = array(
+  'description' => t('The Period Drop Down'),
+  'fields' => array(
+    'periodid' => array(
+      'description' => t('Period Primary Key'),
+      'type' => 'serial',
+      'not null' => TRUE,
+      ),
+     'name' => array(
+       'description' => t('How the period should display'),
+       'type' => 'varchar',
+       'length' => '255',
+      ),       
+    'sequence' => array(
+      'description' => t('The Period Sort Order'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_userid' => array(
+      'description' => t('The user saving the record'),
+      'type' => 'int',
+      'not null' => TRUE,
+      ),
+    'saved_datetime' => array(
+      'description' => t('The date and time the record was saved'),
+      'mysql_type' => 'datetime',
+      'type' => 'varchar',
+      'not null' => TRUE,
+      ),
+    ),
+  'primary key' => array('periodid'),
+);  
   return $schema;
 }
 
@@ -1811,6 +1842,42 @@ function hockey_stats_install() {
     ->fields(array(
         'name' => '10:00',
         'length' => '600',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();    
+    
+    db_insert('period')
+    ->fields(array(
+        'name' => '1',
+        'sequence' => '1',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();  
+    
+    db_insert('period')
+    ->fields(array(
+        'name' => '2',
+        'sequence' => '2',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();  
+    
+    db_insert('period')
+    ->fields(array(
+        'name' => '3',
+        'sequence' => '3',
+        'saved_userid' => 0,
+        'saved_datetime' => $current_date,
+    ))
+    ->execute();  
+    
+    db_insert('period')
+    ->fields(array(
+        'name' => 'OT',
+        'sequence' => '4',
         'saved_userid' => 0,
         'saved_datetime' => $current_date,
     ))

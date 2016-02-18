@@ -4,7 +4,8 @@ class GamePenalty implements CrudInterface {
 
   private $gamePenaltyId;
   private $gameId;
-  private $period;
+  private $periodId;
+  private $periodName;
   private $time;
   private $seasonTeamPlayerId;
   private $playerFirstName;
@@ -17,14 +18,14 @@ class GamePenalty implements CrudInterface {
   private $savedDateTime = NULL;
   private $savedUserID = 0;
   
-  function __construct($gamePenaltyId = 0, $gameId = 0, $period = 0, 
+  function __construct($gamePenaltyId = 0, $gameId = 0, $periodId = 0, 
     $time = NULL, $seasonTeamPlayerId = 0, $penaltyId = 0, $penaltyDurationId = NULL,
     $playerFirstName = NULL, $playerLastName = NULL, $penaltyName = NULL, 
-    $penaltyDuration = NULL, $teamName = NULL) {
+    $penaltyDuration = NULL, $teamName = NULL, $periodName = NULL) {
 
     $this->setGamePenaltyId($gamePenaltyId);
     $this->setGameId($gameId );
-    $this->setPeriod($period);
+    $this->setPeriodId($periodId);
     $this->setTime($time);
     $this->setSeasonTeamPlayerId($seasonTeamPlayerId);
     $this->setPenaltyId($penaltyId);
@@ -34,6 +35,7 @@ class GamePenalty implements CrudInterface {
     $this->setPenaltyName($penaltyName);
     $this->setPenaltyDuration($penaltyDuration);
     $this->setTeamName($teamName);
+    $this->setPeriodName($periodName);
   }
     
   public function setSavedDateTimeAndUser($savedDateTime, $savedUserID) {
@@ -50,12 +52,15 @@ class GamePenalty implements CrudInterface {
     $query->innerJoin('player', 'p', 'p.playerid = stp.playerid');
     $query->innerJoin('penalty_duration', 'gpd', 'gpd.penalty_durationid = gp.penalty_durationid');
     $query->innerJoin('penalty', 'pen', 'pen.penaltyid = gp.penaltyid');
+    $query->innerJoin('period', 'per', 'per.periodid = gp.periodid');
     $query->fields('gp');
     $query->addField('p', 'first_name');
     $query->addField('p', 'last_name');
     $query->addField('t', 'name', 'teamName');
     $query->addField('gpd', 'name', 'penaltyDuration');
     $query->addField('pen', 'name', 'penaltyName');
+    $query->addField('pen', 'name', 'penaltyName');
+    $query->addField('per', 'name', 'periodName');
     $query->condition('game_penaltyid', $this->getGamePenaltyId());
     $result = $query->execute();
    
@@ -64,7 +69,7 @@ class GamePenalty implements CrudInterface {
     if (isset($record)) {
       $this->setGamePenaltyId($record['game_penaltyid']);
       $this->setGameId($record['gameid']);
-      $this->setPeriod($record['period']);
+      $this->setPeriodId($record['periodid']);
       $this->setTime($record['time']);
       $this->setSeasonTeamPlayerId($record['season_team_playerid']);
       $this->setPenaltyId($record['penaltyid']);
@@ -74,6 +79,7 @@ class GamePenalty implements CrudInterface {
       $this->setPenaltyName($record['penaltyName']);
       $this->setPenaltyDuration($record['penaltyDuration']);
       $this->setTeamName($record['teamName']);
+      $this->setPeriodName($record['periodName']);
       $this->setSavedDateTimeAndUser($record['saved_datetime'], $record['saved_userid']);      
     }
     else {
@@ -96,7 +102,7 @@ class GamePenalty implements CrudInterface {
     db_insert('game_penalty')
       ->fields(array(
            'gameid' => $this->getGameId(),
-           'period' => $this->getPeriod(),
+           'periodid' => $this->getPeriodId(),
            'time' => $this->getTime(),
            'penaltyid' => $this->getPenaltyId(),
            'penalty_durationid' => $this->getPenaltyDurationId(),
@@ -115,7 +121,7 @@ class GamePenalty implements CrudInterface {
     db_update('game_penalty')
       ->fields(array(
            'gameid' => $this->getGameId(),
-           'period' => $this->getPeriod(),
+           'periodid' => $this->getPeriodId(),
            'time' => $this->getTime(),
            'penaltyid' => $this->getPenaltyId(),
            'penalty_durationid' => $this->getPenaltyDurationId(),
@@ -136,12 +142,13 @@ class GamePenalty implements CrudInterface {
 
     db_insert('game_penalty_history')
       ->fields(array(
-           'gameid' => $this->getGameId(),
-           'period' => $this->getPeriod(),
-           'time' => $this->getTime(),
-           'penaltyid' => $this->getPenaltyId(),
-           'game_durationid' => $this->getPenaltyDurationId(),
-           'season_team_playerid' => $this->getSeasonTeamPlayerId(),
+           'game_penaltyid' => $current->getGamePenaltyId(),
+           'gameid' => $current->getGameId(),
+           'periodid' => $current->getPeriodId(),
+           'time' => $current->getTime(),
+           'penaltyid' => $current->getPenaltyId(),
+           'penalty_durationid' => $current->getPenaltyDurationId(),
+           'season_team_playerid' => $current->getSeasonTeamPlayerId(),
            'saved_userid' => $current->getSavedUserID(),
            'saved_datetime' => $current->getSavedDateTime(),
            'history_userid' => $this->getSavedUserID(),
@@ -168,7 +175,7 @@ class GamePenalty implements CrudInterface {
 
     if ($comparison_obj instanceof GamePenalty) {
       if ($this->getGameId() == $comparison_obj->getGameId() 
-        && $this->getPeriod() == $comparison_obj->getPeriod() 
+        && $this->getPeriodId() == $comparison_obj->getPeriodId() 
         && $this->getTime() == $comparison_obj->getTime() 
         && $this->getPenaltyId() == $comparison_obj->getPenaltyId()
         && $this->getPenaltyDurationId() == $comparison_obj->etPenaltyDurationId() 
@@ -197,14 +204,22 @@ class GamePenalty implements CrudInterface {
     $this->gameId = $gameId;
   }
 
-  public function getPeriod() {
-    return $this->period;
+  public function getPeriodId() {
+    return $this->periodId;
   }
 
-  public function setPeriod($period) {
-    $this->period = $period;
+  public function setPeriodId($periodId) {
+    $this->periodId = $periodId;
   }
 
+  public function getPeriodName() {
+    return $this->periodName;
+  }
+
+  public function setPeriodName($periodName) {
+    $this->periodName = $periodName;
+  }
+  
   public function getTime() {
     return $this->time;
   }

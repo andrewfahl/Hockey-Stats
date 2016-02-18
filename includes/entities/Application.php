@@ -336,11 +336,15 @@ class Application {
   public function getPeriodList() {
     $periods = array();
     
-    $periods['1'] = '1';
-    $periods['2'] = '2';
-    $periods['3'] = '3';
-    $periods['OT'] = 'OT';
-    
+    $result = db_select('period', 'p')
+      ->fields('p')
+      ->orderBy('p.sequence')
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $periods[$record['periodid']] = $record['name'];
+    }
+
     return $periods;
   }
   

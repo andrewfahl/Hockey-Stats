@@ -460,23 +460,25 @@ class Game implements CrudInterface {
     $query->innerJoin('player', 'p', 'p.playerid = stp.playerid');
     $query->innerJoin('penalty_duration', 'gpd', 'gpd.penalty_durationid = gp.penalty_durationid');
     $query->innerJoin('penalty', 'pen', 'pen.penaltyid = gp.penaltyid');
+    $query->innerJoin('period', 'per', 'per.periodid = gp.periodid');
     $query->fields('gp');
     $query->addField('p', 'first_name');
     $query->addField('p', 'last_name');
     $query->addField('t', 'name', 'teamName');
     $query->addField('gpd', 'name', 'penaltyDuration');
     $query->addField('pen', 'name', 'penaltyName');
+    $query->addField('per', 'name', 'periodName');
     $query->condition('gameid', $this->getGameId());
-    $query->orderBy('gp.period', 'DESC');
-    $query->orderBy('gp.time', 'DESC');
+    $query->orderBy('per.sequence');
+    $query->orderBy('gp.time');
     $result = $query->execute();
     
     while ($record = $result->fetchAssoc()) {
       $penalties[$record['game_penaltyid']] = new GamePenalty($record['game_penaltyid'], 
-        $record['gameid'], $record['period'], $record['time'], 
+        $record['gameid'], $record['periodid'], $record['time'], 
         $record['season_team_playerid'], $record['penaltyid'],
         $record['penalty_durationid'], $record['first_name'], $record['last_name'], 
-        $record['penaltyName'], $record['penaltyDuration'], $record['teamName']);
+        $record['penaltyName'], $record['penaltyDuration'], $record['teamName'], $record['periodName']);
     }
     
     return $penalties;
