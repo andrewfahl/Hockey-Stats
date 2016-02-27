@@ -256,20 +256,6 @@ class SeasonTeam implements CrudInterface {
     // find the goalie based on the number of games played for the team and the players position
     $goalie = NULL;
     
-    // query shold be something like
-    /*
-    select gp.playerid, count(gp.playerid) as count
-    from game g
-    inner join game_player gp on gp.gameid = g.gameid
-      and gp.teamid = 1
-      and gp.goalie_yn = 1
-    where g.seasonid = 5
-    AND (g.home_teamid = 1 OR g.visiting_teamid = 1)
-    GROUP BY gp.playerid
-    order by count DESC
-    LIMIT 1 OFFSET 0; 
-    */
-    
     $or = db_or()
          ->condition('g.home_teamid', $this->getTeamId())
          ->condition('g.visiting_teamid', $this->getTeamId());
@@ -296,4 +282,16 @@ class SeasonTeam implements CrudInterface {
     return $goalie;
   }
 
+  public function bothPlayersAreOnTeam($season_team_playerid, $second_season_team_playerid) {
+    
+    $returnValue = FALSE;
+    
+    $playerIDs = $this->getSeasonTeamPlayerIdList();
+    
+    if(in_array($season_team_playerid, $playerIDs) && in_array($second_season_team_playerid, $playerIDs)) {
+      $returnValue = TRUE;
+    }
+    
+    return $returnValue;
+  }
 }

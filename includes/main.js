@@ -197,6 +197,30 @@ function penaltyPostTo() {
     jQuery('#hockey-stats-game-penalties-landing').submit();    
 }
 
+function goalEdit(gameGoalId) {
+    jQuery('#formAction').val('edit');
+    jQuery('#gameGoalId').val(gameGoalId);
+    goalPostTo();
+}
+
+function goalDelete(gameGoalId) {
+    jQuery('#formAction').val('delete');
+    jQuery('#gameGoalId').val(gameGoalId);
+    goalPostTo();
+}
+
+function goalAdd(gameGoalId) {
+    jQuery('#formAction').val('add');
+    jQuery('#gameGoalId').val(gameGoalId);
+    goalPostTo();
+}
+
+function goalPostTo() { 
+    var goTo = jQuery('#formAction').val();
+
+    jQuery('#hockey-stats-game-goals-landing').attr('action', '/?q=base/game/goals/'+goTo);
+    jQuery('#hockey-stats-game-goals-landing').submit();    
+}
 
 function setCookieSeasonId(seasonId) {
     jQuery.cookie("seasonid", seasonId);

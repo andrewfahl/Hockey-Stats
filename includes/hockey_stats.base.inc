@@ -15,20 +15,13 @@ function hockey_stats_home_page_content() {
     $html = "To Do:";
     $html .= '<ul>';
     $html .= '<li>Team Logos</li>';
-    $html .= '<li>Goals Page</li>';
-    $html .= '<li>Penalties (currently on add new link)</li>';
     $html .= '<li>Figure out how to restrict access</li>';
     $html .= '<li>Build Views in for front end</li>';
-    $html .= '<li>Make sure all deletes cascade</li>';
+    $html .= '<li>Make sure all deletes cascade so we dont orphan records</li>';
     $html .= '<li>Cancel Buttons shouldnt do a post back</li>';
     $html .= '<li>Make sure blanks in text fields are saved as NULL (Game notes)</li>';
     $html .= '<li>Move validation into the entities</li>';
     $html .= '<li>Sort Games in Season better.  Maybe push the completed games to the bottom in a different table</li>';
-    $html .= '</ul>';
-    
-    $html .= "Think About:";
-    $html .= '<ul>';
-    $html .= '<li>Save Penalty Duration in Seconds Might make summing penalty minutes easier</li>';
     $html .= '</ul>';
      
     $html .= "Nice To Have:";
@@ -37,9 +30,10 @@ function hockey_stats_home_page_content() {
     $html .= '<li>Genaric Player (Sub, ringer....)</li>';    
     $html .= '<li>Set Roster Search For Player functionality</li>';
     $html .= '<li>USA Hockey Info</li>';
-    $html .= '<li>Payment Info</li>';
-    $html .= '<li>The munu expanded all the time</li>';
+    $html .= '<li>Payment Info?</li>';
+    $html .= '<li>The menu expanded all the time</li>';
     $html .= '<li>Build score sheet from pdf</li>';
+    $html .= '<li>Build sign in sheet</li>';
     $html .= '<li>Player Ratings</li>';
     $html .= '<li>Identify Team Captain (maybe with contact info)</li>';
     $html .= '<li>Cleanup the js</li>';
@@ -53,7 +47,7 @@ function hockey_stats_home_page_content() {
     $html .= '<li>Navigation: is the query string a problem?</li>';
     $html .= '<li>Set Roster All Players in mult columns or do we keep the formating out of the module?</li>';
     $html .= '<li>Do all of my tables in the DB need to start with the Module Name?</li>';
-    $html .= '<li>Will views work with datetime fields?</li>';
+    $html .= '<li>Will views work with datetime fields or do they need to be in int timestamp?</li>';
     $html .= '</ul>';
     
     //$html .= '<li></li>';

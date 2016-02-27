@@ -30,6 +30,7 @@ class Game implements CrudInterface {
   private $homeTeamGoalie;
   private $visitingTeamGoalie;
   private $penalties;
+  private $goals;
   
   function __construct($gameId = 0, $homeTeamId = 0, $visitingTeamId = 0, 
     $locationId = 0, $seasonId = 0, $startDateTime = NULL, $playoffGameYN = 0,
@@ -200,7 +201,7 @@ class Game implements CrudInterface {
            'saved_datetime' => $current_game->getSavedDateTime(),
            'history_userid' => $this->getSavedUserID(),
            'history_datetime' => $this->getSavedDateTime(),
-           'home_team_first_period_goals' => $current_game>getHomeTeamFirstPeriodGoals(),
+           'home_team_first_period_goals' => $current_game->getHomeTeamFirstPeriodGoals(),
            'visiting_team_first_period_goals' => $current_game->getVisitingTeamFirstPeriodGoals(),
            'home_team_second_period_goals' => $current_game->getHomeTeamSecondPeriodGoals(),
            'visiting_team_second_period_goals' => $current_game->getVisitingTeamSecondPeriodGoals(),
@@ -623,6 +624,54 @@ class Game implements CrudInterface {
     $visitingTeamPlayers = array($this->getVisitingTeamName() => $visitingTeam->getPlayerList());
     
     return $visitingTeamPlayers + $homeTeamPlayers;
+  }
+  
+  public function getGoals() {
+    if($this->goals == NULL) {
+      $this->setGoals($this->getAllGoals());
+    }    
+    return $this->goals;
+  }
+
+  public function setGoals($goals) {
+    $this->goals = $goals;
+  }
+  
+  private function getAllGoals() {
+    $goals = array();
+    
+    $query = db_select('game_goal', 'gg');
+    $query->innerJoin('season_team_player', 'stp', 'stp.season_team_playerid = gg.season_team_playerid');
+    $query->leftJoin('season_team_player', 'ast', 'ast.season_team_playerid = gg.assist_season_team_playerid');
+    $query->leftJoin('season_team_player', 'sast', 'sast.season_team_playerid = gg.second_assist_season_team_playerid');
+    $query->innerJoin('season_team', 'st', 'st.season_teamid = stp.season_teamid');    
+    $query->innerJoin('team', 't', 'st.teamid = t.teamid');
+    $query->innerJoin('player', 'p', 'p.playerid = stp.playerid');
+    $query->leftJoin('player', 'ap', 'ap.playerid = ast.playerid');
+    $query->leftJoin('player', 'sap', 'sap.playerid = sast.playerid');
+    $query->innerJoin('period', 'per', 'per.periodid = gg.periodid');
+    $query->fields('gg');
+    $query->addField('p', 'first_name');
+    $query->addField('p', 'last_name');
+    $query->addField('ap', 'first_name', 'assist_first_name');
+    $query->addField('ap', 'last_name', 'assist_last_name');
+    $query->addField('sap', 'first_name', 'second_assist_first_name');
+    $query->addField('sap', 'last_name', 'second_assist_last_name');    
+    $query->addField('t', 'name', 'teamName');
+    $query->addField('per', 'name', 'periodName');
+    $query->condition('gameid', $this->getGameId());
+    $result = $query->execute();
+    
+    while ($record = $result->fetchAssoc()) {
+      $goals[$record['game_goalid']] = new GameGoal($record['game_goalid'], $this->getGameId(), $record['periodid'], 
+        $record['time'], $record['season_team_playerid'], $record['assist_season_team_playerid'], 
+        $record['second_assist_season_team_playerid'], $record['first_name'], 
+        $record['last_name'], $record['teamName'], $record['periodName'],
+        $record['assist_first_name'], $record['assist_last_name'],
+        $record['second_assist_first_name'], $record['second_assist_last_name']);
+    }
+    
+    return $goals;
   }
   
 }

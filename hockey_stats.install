@@ -1159,11 +1159,11 @@ $schema['game_player_history'] = array(
   'primary key' => array('game_player_historyid'),
 ); 
 
-$schema['game_score'] = array(
-  'description' => t('Game Score'),
+$schema['game_goal'] = array(
+  'description' => t('Game Goal'),
   'fields' => array(
-    'game_scoreid' => array(
-      'description' => t('Game Score Primary Key'),
+    'game_goalid' => array(
+      'description' => t('Game Goal Primary Key'),
       'type' => 'serial',
       'not null' => TRUE,
       ),
@@ -1181,17 +1181,16 @@ $schema['game_score'] = array(
        'type' => 'varchar',
        'length' => '255',
       ), 
-    'playerid' => array(
-      'description' => t('Goal Player Foreign Key'),
-      'type' => 'int',
-      'not null' => TRUE,
-      ),
-    'assist_playerid' => array(
-      'description' => t('Assist Player Foreign Key'),
+    'season_team_playerid' => array(
+      'description' => t('Goal Season Team Player Foreign Key'),
       'type' => 'int',
       ),
-    'second_assist_playerid' => array(
-      'description' => t('Second Assist Player Foreign Key'),
+    'assist_season_team_playerid' => array(
+      'description' => t('Assist Season Team Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'second_assist_season_team_playerid' => array(
+      'description' => t('Second Assist Season Team Player Foreign Key'),
       'type' => 'int',
       ),
     'saved_userid' => array(
@@ -1206,19 +1205,19 @@ $schema['game_score'] = array(
       'not null' => TRUE,
       ),
     ),
-  'primary key' => array('game_scoreid'),
+  'primary key' => array('game_goalid'),
 );  
 
-$schema['game_score_history'] = array(
-  'description' => t('Game Score History'),
+$schema['game_goal_history'] = array(
+  'description' => t('Game Goal History'),
   'fields' => array(
-    'game_score_historyid' => array(
-      'description' => t('Game Score History Primary Key'),
+    'game_goal_historyid' => array(
+      'description' => t('Game Goal History Primary Key'),
       'type' => 'serial',
       'not null' => TRUE,
       ),
-    'game_scoreid' => array(
-      'description' => t('Game Score Foreign Key'),
+    'game_goalid' => array(
+      'description' => t('Game Goal Foreign Key'),
       'type' => 'int',
       'not null' => TRUE,
       ),
@@ -1236,17 +1235,16 @@ $schema['game_score_history'] = array(
        'type' => 'varchar',
        'length' => '255',
       ), 
-    'playerid' => array(
-      'description' => t('Goal Player Foreign Key'),
-      'type' => 'int',
-      'not null' => TRUE,
-      ),
-    'assist_playerid' => array(
-      'description' => t('Assist Player Foreign Key'),
+    'season_team_playerid' => array(
+      'description' => t('Goal Season Team Player Foreign Key'),
       'type' => 'int',
       ),
-    'second_assist_playerid' => array(
-      'description' => t('Second Assist Player Foreign Key'),
+    'assist_season_team_playerid' => array(
+      'description' => t('Assist Season Team Player Foreign Key'),
+      'type' => 'int',
+      ),
+    'second_assist_season_team_playerid' => array(
+      'description' => t('Second Assist Season Team Player Foreign Key'),
       'type' => 'int',
       ),
     'saved_userid' => array(
@@ -1272,7 +1270,7 @@ $schema['game_score_history'] = array(
       'not null' => TRUE,
       ),
     ),
-  'primary key' => array('game_score_historyid'),
+  'primary key' => array('game_goal_historyid'),
 );  
 
 $schema['game_penalty'] = array(

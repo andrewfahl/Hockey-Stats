@@ -25,6 +25,7 @@ function hockey_stats_auto_load_files() {
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/PlayerPosition.php';
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePlayer.php';
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GamePenalty.php';  
+    require_once drupal_get_path('module', 'hockey_stats') . '/includes/entities/GameGoal.php';  
     require_once drupal_get_path('module', 'hockey_stats') . '/includes/Utility.php';
 }
 
@@ -246,10 +247,37 @@ function hockey_stats_menu() {
     
     $items['base/game/goals'] = array(
         'title'            => 'Goals',
-        'page callback'    => 'hockey_stats_game_goals_page',
+        'page callback'    => 'hockey_stats_game_goals_landing_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.goal.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/goals/add'] = array(
+        'title'            => 'Goals',
+        'page callback'    => 'hockey_stats_game_goals_add_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.goal.inc',
+        'type'             => MENU_CALLBACK,
+    );
+        
+    $items['base/game/goals/edit'] = array(
+        'title'            => 'Goals',
+        'page callback'    => 'hockey_stats_game_goals_edit_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.goal.inc',
+        'type'             => MENU_CALLBACK,
+    );
+    
+    $items['base/game/goals/delete'] = array(
+        'title'            => 'Goals',
+        'page callback'    => 'hockey_stats_game_goals_delete_page',
+        'access arguments' => array('access content'),
+        'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
+        'file'             => 'hockey_stats.goal.inc',
         'type'             => MENU_CALLBACK,
     );
     
@@ -294,7 +322,7 @@ function hockey_stats_menu() {
         'page callback'    => 'hockey_stats_game_attendance_page',
         'access arguments' => array('access content'),
         'file path'        => drupal_get_path('module', 'hockey_stats') . '/includes',
-        'file'             => 'hockey_stats.game.inc',
+        'file'             => 'hockey_stats.attendance.inc',
         'type'             => MENU_CALLBACK,
     );    
     

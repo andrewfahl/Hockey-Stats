@@ -59,7 +59,6 @@ class GamePenalty implements CrudInterface {
     $query->addField('t', 'name', 'teamName');
     $query->addField('gpd', 'name', 'penaltyDuration');
     $query->addField('pen', 'name', 'penaltyName');
-    $query->addField('pen', 'name', 'penaltyName');
     $query->addField('per', 'name', 'periodName');
     $query->condition('game_penaltyid', $this->getGamePenaltyId());
     $result = $query->execute();
@@ -85,7 +84,6 @@ class GamePenalty implements CrudInterface {
     else {
       throw new Exception('Game Penalty Not Found');
     }
-     
   }
 
   public function save() {
