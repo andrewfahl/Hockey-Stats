@@ -80,10 +80,10 @@ class Utility {
   
   /*
    * sets the cookie based on the params cookie name, cookie value and the 
-   * cookie duration that defaults to one day
+   * cookie duration is set to 30 days
    */
   public static function setCookieValue($cookie_name, $cookie_value) {
-    setcookie($cookie_name, $cookie_value);
+    setcookie($cookie_name, $cookie_value, time()+60*60*24*30); 
   }
 
   public static function isValidTime($time) {

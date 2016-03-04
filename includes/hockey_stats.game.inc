@@ -414,8 +414,9 @@ function hockey_stats_game_edit($form, &$form_state) {
     throw(new Exception("Game not found"));
   }
 
-  $seasonid = Utility::getCookieValue(Utility::COOKIE_SEASONID);
-
+  //$seasonid = Utility::getCookieValue(Utility::COOKIE_SEASONID);
+  $seasonid = $game->getSeasonId();
+  
   if (!isset($seasonid)) {
     throw new Exception('Season Not Found');
   }

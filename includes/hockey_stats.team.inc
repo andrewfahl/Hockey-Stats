@@ -385,121 +385,132 @@ function hockey_stats_team_set_roster($form, &$form_state) {
       $season_team = $latest_season_team;
     }
   }
-
-  $options = array(0 => '') + $team->getSeasonList();
-
-  $form['seasonid'] = array(
-       '#type' => 'select',
-       '#title' => t('Select Season'),
-       '#options' => $options,
-       '#default_value' => $season_team->getSeasonId(),
-       '#attributes' => array('onchange' => 'setCookieSeasonId(jQuery(this).val()); window.location.reload();',
-            'id' => 'seasonid'),
-  );
-
-  $form['teamId'] = array(
-       '#type' => 'hidden',
-       '#value' => '',
-       '#attributes' => array('id' => 'teamId'),
-       '#value' => $team->getTeamId(),
-  );
-
-  $form['season_teamid'] = array(
-       '#type' => 'hidden',
-       '#value' => '',
-       '#attributes' => array('id' => 'season_teamid'),
-       '#value' => $season_team->getSeasonTeamId(),
-  );
-
-  if (isset($season_team)) {
-
-    $current_players = $season_team->getSeasonTeamPlayers();
-
-    $on_team_checkboxes = array(); // all of the team names
-    $on_team_ischecked = array(); // if the team is in the season or not
-
-    foreach ($current_players as $player) {
-      $on_team_checkboxes[$player->getSeasonTeamPlayerId()] = $player->getFullName();
-      $on_team_ischecked[$player->getSeasonTeamPlayerId()] = $player->getSeasonTeamPlayerId();
-    }
-
-    $form['form']['current_players'] = array(
-         '#type' => 'fieldset',
-         '#title' => t('On the Team for this Season'),
+  
+  if (!isset($season_team)) {
+    $form['text'] = array('#markup' => '<p>The team must be added to a season before you can set a roster.</p>');
+    $form['teamId'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'teamId'),
+         '#value' => $team->getTeamId(),
     );
-
-    $form['form']['current_players']['current_season_team_player'] = array(
-         '#type' => 'checkboxes',
-         '#options' => $on_team_checkboxes,
-         '#attributes' => array('checked' => 'checked'),
-         '#default_value' => $on_team_ischecked,
-    );
-
-    $form['form']['submit'] = array(
-         '#type' => 'submit',
-         '#value' => 'Submit',
-    );
-
-    $form['form']['cancel'] = Utility::getCancelButton();
-
-
-    $current_playerids = $season_team->getPlayerIdList();
-    $application = new Application();
-    $all_players = $application->getActivePlayers();
-
-    $all_players_checkboxes = array();
-    $former_playerids = $team->getPlayerIdList();
-
-    foreach ($all_players as $player) {
-      // if player is not a current player
-      if (!in_array($player->getPlayerId(), $current_playerids)) {
-        $all_players_checkboxes[$player->getPlayerId()] = $player->getFullName();
-      }
-    }
-
-    $form['form']['all_players'] = array(
-         '#type' => 'fieldset',
-         '#title' => t('All Available Players'),
-         '#collapsed' => FALSE,
-         '#collapsible' => TRUE,
-    );
-
-    $form['form']['all_players']['all_player'] = array(
-         '#type' => 'checkboxes',
-         '#options' => $all_players_checkboxes,
-    );
-
-    $former_players = $team->getPlayers();
-    $former_players_checkboxes = array();
-
-    foreach ($former_players as $player) {
-
-      // if player is not currently on the team add the player to the list
-      if (!in_array($player->getPlayerId(), $current_playerids)) {
-        $former_players_checkboxes[$player->getPlayerId()] = $player->getFullName();
-      }
-    }
-
-    $form['form']['former_players'] = array(
-         '#type' => 'fieldset',
-         '#title' => t('Previously Played on the Team'),
-         '#collapsed' => FALSE,
-         '#collapsible' => TRUE,
-    );
-
-    $form['form']['former_players']['former_player'] = array(
-         '#type' => 'checkboxes',
-         '#options' => $former_players_checkboxes,
-    );
-
-    $form['submit2'] = array(
-         '#type' => 'submit',
-         '#value' => 'Submit',
-    );
-
     $form['cancel2'] = Utility::getCancelButton();
   }
+  else {
+    $options = array(0 => '') + $team->getSeasonList();
 
+    $form['seasonid'] = array(
+         '#type' => 'select',
+         '#title' => t('Select Season'),
+         '#options' => $options,
+         '#default_value' => $season_team->getSeasonId(),
+         '#attributes' => array('onchange' => 'setCookieSeasonId(jQuery(this).val()); window.location.reload();',
+              'id' => 'seasonid'),
+    );
+
+    $form['teamId'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'teamId'),
+         '#value' => $team->getTeamId(),
+    );
+
+    $form['season_teamid'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'season_teamid'),
+         '#value' => $season_team->getSeasonTeamId(),
+    );
+
+    if (isset($season_team)) {
+
+      $current_players = $season_team->getSeasonTeamPlayers();
+
+      $on_team_checkboxes = array(); // all of the team names
+      $on_team_ischecked = array(); // if the team is in the season or not
+
+      foreach ($current_players as $player) {
+        $on_team_checkboxes[$player->getSeasonTeamPlayerId()] = $player->getFullName();
+        $on_team_ischecked[$player->getSeasonTeamPlayerId()] = $player->getSeasonTeamPlayerId();
+      }
+
+      $form['form']['current_players'] = array(
+           '#type' => 'fieldset',
+           '#title' => t('On the Team for this Season'),
+      );
+
+      $form['form']['current_players']['current_season_team_player'] = array(
+           '#type' => 'checkboxes',
+           '#options' => $on_team_checkboxes,
+           '#attributes' => array('checked' => 'checked'),
+           '#default_value' => $on_team_ischecked,
+      );
+
+      $form['form']['submit'] = array(
+           '#type' => 'submit',
+           '#value' => 'Submit',
+      );
+
+      $form['form']['cancel'] = Utility::getCancelButton();
+
+
+      $current_playerids = $season_team->getPlayerIdList();
+      $application = new Application();
+      $all_players = $application->getActivePlayers();
+
+      $all_players_checkboxes = array();
+      $former_playerids = $team->getPlayerIdList();
+
+      foreach ($all_players as $player) {
+        // if player is not a current player
+        if (!in_array($player->getPlayerId(), $current_playerids)) {
+          $all_players_checkboxes[$player->getPlayerId()] = $player->getFullName();
+        }
+      }
+
+      $form['form']['all_players'] = array(
+           '#type' => 'fieldset',
+           '#title' => t('All Available Players'),
+           '#collapsed' => FALSE,
+           '#collapsible' => TRUE,
+      );
+
+      $form['form']['all_players']['all_player'] = array(
+           '#type' => 'checkboxes',
+           '#options' => $all_players_checkboxes,
+      );
+
+      $former_players = $team->getPlayers();
+      $former_players_checkboxes = array();
+
+      foreach ($former_players as $player) {
+
+        // if player is not currently on the team add the player to the list
+        if (!in_array($player->getPlayerId(), $current_playerids)) {
+          $former_players_checkboxes[$player->getPlayerId()] = $player->getFullName();
+        }
+      }
+
+      $form['form']['former_players'] = array(
+           '#type' => 'fieldset',
+           '#title' => t('Previously Played on the Team'),
+           '#collapsed' => FALSE,
+           '#collapsible' => TRUE,
+      );
+
+      $form['form']['former_players']['former_player'] = array(
+           '#type' => 'checkboxes',
+           '#options' => $former_players_checkboxes,
+      );
+
+      $form['submit2'] = array(
+           '#type' => 'submit',
+           '#value' => 'Submit',
+      );
+
+      $form['cancel2'] = Utility::getCancelButton();
+    }
+  }
   return $form;
 }
 
@@ -578,59 +589,70 @@ function hockey_stats_team_assign_numbers($form, &$form_state) {
       $season_team = $latest_season_team;
     }
   }
+  
+  if (!isset($season_team)) {
+    $form['text'] = array('#markup' => '<p>The team must be added to a season before you can assign the numbers to the players.</p>');
+    $form['teamId'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'teamId'),
+         '#value' => $team->getTeamId(),
+    );
+    $form['cancel2'] = Utility::getCancelButton();
+  }
+  else {
+    $options = array(0 => '') + $team->getSeasonList();
 
-  $options = array(0 => '') + $team->getSeasonList();
-
-  $form['seasonid'] = array(
-       '#type' => 'select',
-       '#title' => t('Select Season'),
-       '#options' => $options,
-       '#default_value' => $season_team->getSeasonId(),
-       '#attributes' => array('onchange' => 'setCookieSeasonId(jQuery(this).val()); window.location.reload();',
-            'id' => 'seasonid'),
-  );
-
-  $form['teamId'] = array(
-       '#type' => 'hidden',
-       '#value' => '',
-       '#attributes' => array('id' => 'teamId'),
-       '#value' => $team->getTeamId(),
-  );
-
-  $form['season_teamid'] = array(
-       '#type' => 'hidden',
-       '#value' => '',
-       '#attributes' => array('id' => 'season_teamid'),
-       '#value' => $season_team->getSeasonTeamId(),
-  );
-
-  if (isset($season_team)) {
-
-    $players = $season_team->getSeasonTeamPlayers();
-
-    $form['form'] = array(
-         '#type' => 'fieldset',
-         '#title' => t('Assign numbers to players for the ' . $season_team->getSeasonName() . ' season'),
+    $form['seasonid'] = array(
+         '#type' => 'select',
+         '#title' => t('Select Season'),
+         '#options' => $options,
+         '#default_value' => $season_team->getSeasonId(),
+         '#attributes' => array('onchange' => 'setCookieSeasonId(jQuery(this).val()); window.location.reload();',
+              'id' => 'seasonid'),
     );
 
-    foreach ($players as $player) {
-      $form['form']['seasonTeamPlayerId' . $player->getSeasonTeamPlayerID()] = array(
-           '#type' => 'textfield',
-           '#title' => t($player->getFullName()),
-           '#size' => 5,
-           '#maxlength' => 2,
-           '#value' => $player->getNumber(),
+    $form['teamId'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'teamId'),
+         '#value' => $team->getTeamId(),
+    );
+
+    $form['season_teamid'] = array(
+         '#type' => 'hidden',
+         '#value' => '',
+         '#attributes' => array('id' => 'season_teamid'),
+         '#value' => $season_team->getSeasonTeamId(),
+    );
+
+    if (isset($season_team)) {
+
+      $players = $season_team->getSeasonTeamPlayers();
+
+      $form['form'] = array(
+           '#type' => 'fieldset',
+           '#title' => t('Assign numbers to players for the ' . $season_team->getSeasonName() . ' season'),
       );
+
+      foreach ($players as $player) {
+        $form['form']['seasonTeamPlayerId' . $player->getSeasonTeamPlayerID()] = array(
+             '#type' => 'textfield',
+             '#title' => t($player->getFullName()),
+             '#size' => 5,
+             '#maxlength' => 2,
+             '#value' => $player->getNumber(),
+        );
+      }
     }
+
+    $form['submit'] = array(
+         '#type' => 'submit',
+         '#value' => 'Submit',
+    );
+
+    $form['cancel'] = Utility::getCancelButton();
   }
-
-  $form['submit'] = array(
-       '#type' => 'submit',
-       '#value' => 'Submit',
-  );
-
-  $form['cancel'] = Utility::getCancelButton();
-
   return $form;
 }
 

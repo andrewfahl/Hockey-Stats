@@ -878,7 +878,6 @@ $schema['player_history'] = array(
       'type' => 'varchar',
       'not null' => TRUE,
       ),
-    ),
     'history_userid' => array(
       'description' => t('The user adding the record to history'),
       'type' => 'int',
@@ -890,6 +889,7 @@ $schema['player_history'] = array(
       'type' => 'varchar',
       'not null' => TRUE,
       ),
+    ),
   'primary key' => array('player_historyid'),
 );  
 

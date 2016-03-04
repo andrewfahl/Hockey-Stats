@@ -223,7 +223,7 @@ function goalPostTo() {
 }
 
 function setCookieSeasonId(seasonId) {
-    jQuery.cookie("seasonid", seasonId);
+    jQuery.cookie("seasonid", seasonId, {expires: 30});
 }
 
 function setCookieLeagueId(leagueId) {
@@ -232,5 +232,5 @@ function setCookieLeagueId(leagueId) {
         document.cookie = "seasonid=; expires=Thu, 01 Jan 1970 00:00:00 UTC"; 
     }
     
-    jQuery.cookie("leagueid", leagueId);
+    jQuery.cookie("leagueid", leagueId, {expires: 30});
 }
